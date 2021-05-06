@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Rainbow.MultiTenancy.Extensions.Identity.Stores;
 using Rainbow.MultiTenancy.Samples.Data;
 using System;
 using System.Collections.Generic;
@@ -39,8 +39,28 @@ namespace Rainbow.MultiTenancy.Samples
                         .UseMultiTenancy()
                     );
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+            //services.AddAuthentication(o =>
+            //{
+            //    o.DefaultScheme = IdentityConstants.ApplicationScheme;
+            //    o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            //}).AddIdentityCookies();
+
+            //services.AddIdentityCore<TenantUser>(o =>
+            //{
+            //    o.Stores.MaxLengthForKeys = 128;
+            //    o.SignIn.RequireConfirmedAccount = true;
+            //})
+            //    .AddDefaultUI()
+            //    .AddDefaultTokenProviders()
+            //    .AddRoles<TenantRole>()
+            //    .AddTenantEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddDefaultIdentity<TenantUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<TenantRole>()
+                .AddTenantEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddRazorPages();
             services.AddControllers();
         }

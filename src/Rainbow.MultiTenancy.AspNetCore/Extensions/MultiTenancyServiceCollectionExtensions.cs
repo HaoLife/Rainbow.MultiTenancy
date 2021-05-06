@@ -15,17 +15,14 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMulitTenancy(this IServiceCollection services, Action<MultiTenancyCoreOptions> action = null)
         {
-            services.AddMulitTenancyCore(action)
-                .AddHttpContextAccessor();
-
-            services.Add(new ServiceCollection()
+            services.TryAdd(new ServiceCollection()
                 .AddSingleton<ICurrentPrincipalAccessor, HttpContextCurrentPrincipalAccessor>()
                 .AddSingleton<ITenantResolveResultAccessor, HttpContextTenantResolveResultAccessor>()
                 .AddTransient<MultiTenancyMiddleware>()
             );
 
-
-            return services;
+            return services.AddMulitTenancyCore(action)
+                .AddHttpContextAccessor();
         }
     }
 }

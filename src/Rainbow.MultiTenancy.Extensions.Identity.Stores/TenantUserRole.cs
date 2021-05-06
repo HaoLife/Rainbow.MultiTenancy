@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 
 namespace Rainbow.MultiTenancy.Extensions.Identity.Stores
 {
-    public class TenantUserRole<TKey>: IdentityUserRole<TKey>, IMultiTenant
+    public class TenantUserRole : TenantUserRole<string>
+    {
+
+    }
+    public class TenantUserRole<TKey> : IdentityUserRole<TKey>, IMultiTenant
         where TKey : IEquatable<TKey>
     {
         public Guid? TenantId { get; set; }

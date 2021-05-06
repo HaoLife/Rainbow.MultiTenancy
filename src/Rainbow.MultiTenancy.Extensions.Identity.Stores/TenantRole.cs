@@ -10,6 +10,10 @@ namespace Rainbow.MultiTenancy.Extensions.Identity.Stores
 {
     public class TenantRole : TenantRole<string>
     {
+        public TenantRole()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
 
     }
     public class TenantRole<TKey> : IdentityRole<TKey>, IMultiTenant

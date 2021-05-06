@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore\Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Rainbow.MultiTenancy.AspNetCore\Rainbow.MultiTenancy.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\Rainbow.MultiTenancy.EntityFrameworkCore\Rainbow.MultiTenancy.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Rainbow.MultiTenancy.Extensions.Identity.Stores\Rainbow.MultiTenancy.Extensions.Identity.Stores.csproj" />

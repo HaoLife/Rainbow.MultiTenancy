@@ -14,10 +14,12 @@ namespace Rainbow.MultiTenancy.EntityFrameworkCore
     public class MultiTenancyConnectionInterceptor : DbConnectionInterceptor
     {
         private readonly IServiceProvider provider;
+        private readonly string connectionStringName;
 
-        public MultiTenancyConnectionInterceptor(IServiceProvider provider)
+        public MultiTenancyConnectionInterceptor(IServiceProvider provider, string connectionStringName)
         {
             this.provider = provider;
+            this.connectionStringName = connectionStringName;
         }
 
         public override InterceptionResult ConnectionOpening(DbConnection connection, ConnectionEventData eventData, InterceptionResult result)
@@ -28,7 +30,7 @@ namespace Rainbow.MultiTenancy.EntityFrameworkCore
             var tenantStore = provider.GetRequiredService<ITenantStore>();
             var tenantConfiguration = tenantStore.FindAsync(currentTenant.Id.Value).GetAwaiter().GetResult();
 
-            var conn = tenantConfiguration.ConnectionStrings.Default;
+            var conn = tenantConfiguration.ConnectionStrings[this.connectionStringName];
 
             eventData.Context.Database.SetConnectionString(conn);
             return result;

@@ -6,6 +6,11 @@ namespace Rainbow.MultiTenancy.Extensions.Identity.Stores
 {
     public class TenantUser : TenantUser<string>
     {
+        public TenantUser()
+        {
+            Id = Guid.NewGuid().ToString();
+            SecurityStamp = Guid.NewGuid().ToString();
+        }
     }
 
     public class TenantUser<TKey> : IdentityUser<TKey>, IMultiTenant
@@ -15,7 +20,9 @@ namespace Rainbow.MultiTenancy.Extensions.Identity.Stores
         /// <summary>
         /// Initializes a new instance of <see cref="IdentityUser{TKey}"/>.
         /// </summary>
-        public TenantUser() { }
+        public TenantUser()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of <see cref="IdentityUser{TKey}"/>.

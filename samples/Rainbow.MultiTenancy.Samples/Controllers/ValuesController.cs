@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Rainbow.MultiTenancy.Extensions.Identity.Stores;
 using Rainbow.MultiTenancy.Samples.Data;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,8 @@ namespace Rainbow.MultiTenancy.Samples.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            var users = this.dbContext.Set<IdentityUser>().ToList();
+
+            var users = this.dbContext.Set<TenantUser>().ToList();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => $"{index}")
             .ToArray();
