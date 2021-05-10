@@ -9,16 +9,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Rainbow.MultiTenancy.AspNetCore.Identity;
+using Rainbow.MultiTenancy.Core;
 using Rainbow.MultiTenancy.Extensions.Identity.Stores;
 
 namespace Rainbow.MultiTenancy.Samples.Areas.Identity.Pages.Account
 {
     public class TenantLoginModel : PageModel
     {
-        private readonly SignInManager<TenantUser> _signInManager;
+        private readonly TenantSignInManager<TenantUser> _signInManager;
         private readonly ILogger<TenantLoginModel> _logger;
 
-        public TenantLoginModel(SignInManager<TenantUser> signInManager, ILogger<TenantLoginModel> logger)
+        public TenantLoginModel(TenantSignInManager<TenantUser> signInManager, ILogger<TenantLoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -84,9 +86,11 @@ namespace Rainbow.MultiTenancy.Samples.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.TenantId, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    if (Input.TenantId.HasValue)
+                        Response.Cookies.Append(TenantResolverConsts.DefaultTenantKey, Input.TenantId.Value.ToString());
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

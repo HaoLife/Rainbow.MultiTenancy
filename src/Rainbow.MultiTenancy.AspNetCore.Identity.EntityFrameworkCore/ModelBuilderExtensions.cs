@@ -44,6 +44,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
                 b.Property(u => u.NormalizedUserName).HasMaxLength(256);
                 b.Property(u => u.Email).HasMaxLength(256);
                 b.Property(u => u.NormalizedEmail).HasMaxLength(256);
+                b.Property(u => u.TenantId);
 
                 if (encryptPersonalData)
                 {
@@ -74,8 +75,9 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
 
             builder.Entity<TUserLogin>(b =>
             {
-                b.HasKey(l => new { l.LoginProvider, l.ProviderKey, l.TenantId });
+                b.HasKey(l => new { l.UserId, l.LoginProvider, l.ProviderKey });
 
+                b.Property(u => u.TenantId);
                 if (maxKeyLength > 0)
                 {
                     b.Property(l => l.LoginProvider).HasMaxLength(maxKeyLength);
@@ -87,8 +89,9 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
 
             builder.Entity<TUserToken>(b =>
             {
-                b.HasKey(t => new { t.UserId, t.LoginProvider, t.Name, t.TenantId });
+                b.HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
 
+                b.Property(u => u.TenantId);
                 if (maxKeyLength > 0)
                 {
                     b.Property(t => t.LoginProvider).HasMaxLength(maxKeyLength);
@@ -141,6 +144,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
 
                 b.Property(u => u.Name).HasMaxLength(256);
                 b.Property(u => u.NormalizedName).HasMaxLength(256);
+                b.Property(u => u.TenantId);
 
                 b.HasMany<TUserRole>().WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
                 b.HasMany<TRoleClaim>().WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
@@ -149,12 +153,14 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
             builder.Entity<TRoleClaim>(b =>
             {
                 b.HasKey(rc => rc.Id);
+                b.Property(u => u.TenantId);
                 b.ToTable($"{nameof(TenantRoleClaim)}s");
             });
 
             builder.Entity<TUserRole>(b =>
             {
-                b.HasKey(r => new { r.UserId, r.RoleId, r.TenantId });
+                b.HasKey(r => new { r.UserId, r.RoleId });
+                b.Property(u => u.TenantId);
                 b.ToTable($"{nameof(TenantUserRole)}s");
             });
 

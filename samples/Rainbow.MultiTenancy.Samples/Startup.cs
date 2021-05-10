@@ -53,6 +53,7 @@ namespace Rainbow.MultiTenancy.Samples
                 o.SignIn.RequireConfirmedAccount = true;
             })
                 .AddDefaultUI()
+                .AddTenantSignInManager()
                 .AddDefaultTokenProviders()
                 .AddRoles<TenantRole>()
                 .AddTenantEntityFrameworkStores<ApplicationDbContext>();

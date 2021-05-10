@@ -60,5 +60,8 @@ namespace Rainbow.MultiTenancy.Extensions.Identity.Core
             return await handler.GetTanantAsync(role, CancellationToken);
         }
 
+
+        
+
     }
 }

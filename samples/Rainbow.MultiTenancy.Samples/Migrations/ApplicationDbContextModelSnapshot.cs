@@ -173,6 +173,9 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
 
             modelBuilder.Entity("Rainbow.MultiTenancy.Extensions.Identity.Stores.TenantUserLogin<string>", b =>
                 {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
@@ -181,19 +184,13 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("LoginProvider", "ProviderKey", "TenantId");
-
-                    b.HasIndex("UserId");
+                    b.HasKey("UserId", "LoginProvider", "ProviderKey");
 
                     b.ToTable("TenantUserLogins");
                 });
@@ -209,7 +206,7 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId", "RoleId", "TenantId");
+                    b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
@@ -235,7 +232,7 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "LoginProvider", "Name", "TenantId");
+                    b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("TenantUserTokens");
                 });
