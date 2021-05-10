@@ -41,25 +41,25 @@ namespace Rainbow.MultiTenancy.Samples
             services.AddDatabaseDeveloperPageExceptionFilter();
 
 
-            //services.AddAuthentication(o =>
-            //{
-            //    o.DefaultScheme = IdentityConstants.ApplicationScheme;
-            //    o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-            //}).AddIdentityCookies();
+            services.AddAuthentication(o =>
+            {
+                o.DefaultScheme = IdentityConstants.ApplicationScheme;
+                o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            }).AddIdentityCookies();
 
-            //services.AddIdentityCore<TenantUser>(o =>
-            //{
-            //    o.Stores.MaxLengthForKeys = 128;
-            //    o.SignIn.RequireConfirmedAccount = true;
-            //})
-            //    .AddDefaultUI()
-            //    .AddDefaultTokenProviders()
-            //    .AddRoles<TenantRole>()
-            //    .AddTenantEntityFrameworkStores<ApplicationDbContext>();
-
-            services.AddDefaultIdentity<TenantUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddTenantIdentityCore<TenantUser>(o =>
+            {
+                o.Stores.MaxLengthForKeys = 128;
+                o.SignIn.RequireConfirmedAccount = true;
+            })
+                .AddDefaultUI()
+                .AddDefaultTokenProviders()
                 .AddRoles<TenantRole>()
                 .AddTenantEntityFrameworkStores<ApplicationDbContext>();
+
+            //services.AddDefaultIdentity<TenantUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddRoles<TenantRole>()
+            //    .AddTenantEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddRazorPages();
             services.AddControllers();

@@ -41,7 +41,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
         {
         }
 
-        public Task SetTenant(TUser user, Guid? tenantId, CancellationToken cancellationToken)
+        public Task SetTenantAsync(TUser user, Guid? tenantId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null)
@@ -51,5 +51,16 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
             user.TenantId = tenantId;
             return Task.CompletedTask;
         }
+
+        public virtual Task<Guid?> GetTanantAsync(TUser user, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            return Task.FromResult(user.TenantId);
+        }
+
     }
 }

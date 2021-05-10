@@ -35,8 +35,8 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
             builder.Entity<TUser>(b =>
             {
                 b.HasKey(u => u.Id);
-                b.HasIndex(u => u.NormalizedUserName).HasDatabaseName("UserNameIndex").IsUnique();
-                b.HasIndex(u => u.NormalizedEmail).HasDatabaseName("EmailIndex");
+                b.HasIndex(u => new { u.NormalizedUserName, u.TenantId }).HasDatabaseName("UserNameIndex").IsUnique();
+                b.HasIndex(u => new { u.NormalizedEmail, u.TenantId }).HasDatabaseName("EmailIndex");
                 b.ToTable($"{nameof(TenantUser)}s");
                 b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
@@ -74,7 +74,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
 
             builder.Entity<TUserLogin>(b =>
             {
-                b.HasKey(l => new { l.LoginProvider, l.ProviderKey });
+                b.HasKey(l => new { l.LoginProvider, l.ProviderKey, l.TenantId });
 
                 if (maxKeyLength > 0)
                 {
@@ -87,7 +87,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
 
             builder.Entity<TUserToken>(b =>
             {
-                b.HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
+                b.HasKey(t => new { t.UserId, t.LoginProvider, t.Name, t.TenantId });
 
                 if (maxKeyLength > 0)
                 {
@@ -127,10 +127,6 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
             where TRoleClaim : TenantRoleClaim<TKey>
             where TUserToken : TenantUserToken<TKey>
         {
-
-
-            //ModelBuilderExtensions.AddTenantUser<TUser, TKey, TUserClaim, TUserLogin, TUserToken>(builder, dbContext);
-
             builder.Entity<TUser>(b =>
             {
                 b.HasMany<TUserRole>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
@@ -139,7 +135,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
             builder.Entity<TRole>(b =>
             {
                 b.HasKey(r => r.Id);
-                b.HasIndex(r => r.NormalizedName).HasDatabaseName("RoleNameIndex").IsUnique();
+                b.HasIndex(r => new { r.NormalizedName, r.TenantId }).HasDatabaseName("RoleNameIndex").IsUnique();
                 b.ToTable($"{nameof(TenantRole)}s");
                 b.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
 

@@ -10,7 +10,7 @@ using Rainbow.MultiTenancy.Samples.Data;
 namespace Rainbow.MultiTenancy.Samples.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210506123209_init")]
+    [Migration("20210508102105_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,10 +43,10 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
+                    b.HasIndex("NormalizedName", "TenantId")
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasFilter("[NormalizedName] IS NOT NULL AND [TenantId] IS NOT NULL");
 
                     b.ToTable("TenantRoles");
                 });
@@ -135,13 +135,13 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
+                    b.HasIndex("NormalizedEmail", "TenantId")
                         .HasDatabaseName("EmailIndex");
 
-                    b.HasIndex("NormalizedUserName")
+                    b.HasIndex("NormalizedUserName", "TenantId")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasFilter("[NormalizedUserName] IS NOT NULL AND [TenantId] IS NOT NULL");
 
                     b.ToTable("TenantUsers");
                 });
@@ -183,17 +183,17 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                    b.HasKey("LoginProvider", "ProviderKey", "TenantId");
 
                     b.HasIndex("UserId");
 
@@ -237,7 +237,7 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("UserId", "LoginProvider", "Name", "TenantId");
 
                     b.ToTable("TenantUserTokens");
                 });

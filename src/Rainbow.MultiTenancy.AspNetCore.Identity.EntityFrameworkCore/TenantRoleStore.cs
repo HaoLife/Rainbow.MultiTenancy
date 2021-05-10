@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
 {
-    public class TenantRoleStore<TRole, TContext, TKey> 
+    public class TenantRoleStore<TRole, TContext, TKey>
         : TenantRoleStore<TRole, TContext, TKey, TenantUserRole<TKey>, TenantRoleClaim<TKey>>,
         IQueryableRoleStore<TRole>,
         IRoleClaimStore<TRole>
@@ -31,6 +31,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
     public class TenantRoleStore<TRole, TContext, TKey, TUserRole, TRoleClaim>
         : RoleStore<TRole, TContext, TKey, TUserRole, TRoleClaim>
         , ITenantHandlerStore<TRole>
+        , ITenantRoleQueryStore<TRole>
         where TRole : TenantRole<TKey>
         where TKey : IEquatable<TKey>
         where TContext : DbContext
@@ -42,15 +43,52 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
         {
 
         }
-        public virtual Task SetTenant(TRole user, Guid? tenantId, CancellationToken cancellationToken)
+
+        public virtual Task<Guid?> GetTanantAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (user == null)
+            if (role == null)
             {
-                throw new ArgumentNullException(nameof(user));
+                throw new ArgumentNullException(nameof(role));
             }
-            user.TenantId = tenantId;
+            return Task.FromResult(role.TenantId);
+        }
+
+        public virtual Task SetTenantAsync(TRole role, Guid? tenantId, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (role == null)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
+            role.TenantId = tenantId;
             return Task.CompletedTask;
+        }
+
+
+        public override Task<TRole> FindByNameAsync(string normalizedName, CancellationToken cancellationToken = default)
+        {
+            return this.FindByNameAsync(normalizedName, null, cancellationToken);
+        }
+
+        public override Task<TRole> FindByIdAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return this.FindByIdAsync(id, null, cancellationToken);
+        }
+
+        public Task<TRole> FindByIdAsync(string id, Guid? tenantId, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            ThrowIfDisposed();
+            var roleId = ConvertIdFromString(id);
+            return Roles.FirstOrDefaultAsync(u => u.Id.Equals(roleId) && u.TenantId == tenantId, cancellationToken);
+        }
+
+        public Task<TRole> FindByNameAsync(string normalizedRoleName, Guid? tenantId, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            ThrowIfDisposed();
+            return Roles.FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName && r.TenantId == tenantId, cancellationToken);
         }
     }
 }

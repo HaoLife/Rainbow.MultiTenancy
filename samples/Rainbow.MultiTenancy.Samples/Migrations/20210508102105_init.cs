@@ -98,13 +98,13 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
                 {
                     LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TenantUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK_TenantUserLogins", x => new { x.LoginProvider, x.ProviderKey, x.TenantId });
                     table.ForeignKey(
                         name: "FK_TenantUserLogins_TenantUsers_UserId",
                         column: x => x.UserId,
@@ -145,12 +145,12 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TenantUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.PrimaryKey("PK_TenantUserTokens", x => new { x.UserId, x.LoginProvider, x.Name, x.TenantId });
                     table.ForeignKey(
                         name: "FK_TenantUserTokens_TenantUsers_UserId",
                         column: x => x.UserId,
@@ -167,9 +167,9 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "TenantRoles",
-                column: "NormalizedName",
+                columns: new[] { "NormalizedName", "TenantId" },
                 unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                filter: "[NormalizedName] IS NOT NULL AND [TenantId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TenantUserClaims_UserId",
@@ -189,14 +189,14 @@ namespace Rainbow.MultiTenancy.Samples.Migrations
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "TenantUsers",
-                column: "NormalizedEmail");
+                columns: new[] { "NormalizedEmail", "TenantId" });
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "TenantUsers",
-                column: "NormalizedUserName",
+                columns: new[] { "NormalizedUserName", "TenantId" },
                 unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                filter: "[NormalizedUserName] IS NOT NULL AND [TenantId] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
