@@ -61,6 +61,7 @@ namespace Rainbow.MultiTenancy.Samples
             //    .AddRoles<TenantRole>()
             //    .AddTenantEntityFrameworkStores<ApplicationDbContext>();
 
+
             services.AddRazorPages();
             services.AddControllers();
         }
