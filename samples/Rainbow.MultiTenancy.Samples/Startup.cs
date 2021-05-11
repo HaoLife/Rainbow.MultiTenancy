@@ -27,17 +27,21 @@ namespace Rainbow.MultiTenancy.Samples
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                    .UseMultiTenancy()
+            );
+
             services.AddMulitTenancy(options =>
             {
-                options.AddHttpTenantResolveContributor()
+                options
+                    .AddDomainTenantResolveContributor("{tenant}.test.com")
+                    .AddHttpTenantResolveContributor()
                     .AddDefaultTenantConfiguration(Configuration.GetSection("Tenant"));
-            });
+            }).AddTenantEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection"))
-                        .UseMultiTenancy()
-                    );
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
 
@@ -82,7 +86,6 @@ namespace Rainbow.MultiTenancy.Samples
                 app.UseHsts();
             }
 
-            app.AddMultiTenancy();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -90,6 +93,8 @@ namespace Rainbow.MultiTenancy.Samples
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.AddMultiTenancy();
 
             app.UseEndpoints(endpoints =>
             {

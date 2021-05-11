@@ -24,5 +24,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return options;
         }
 
+
+        public static MultiTenancyCoreOptions AddDomainTenantResolveContributor(this MultiTenancyCoreOptions options, string domain)
+        {
+            options.TenantResolvers.Add(new DomainTenantResolveContributor(domain));
+
+            return options;
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rainbow.MultiTenancy.EntityFrameworkCore
+namespace Rainbow.MultiTenancy.Abstractions
 {
     public class Tenant
     {
@@ -16,6 +16,7 @@ namespace Rainbow.MultiTenancy.EntityFrameworkCore
         public DateTime? LastUpdateTime { get; set; }
         public string LastUpdatorId { get; set; }
 
-    }
+        public List<TenantConfigurationString> ConfigurationStrings { get; set; }
 
+    }
 }

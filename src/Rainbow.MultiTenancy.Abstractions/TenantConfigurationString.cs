@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rainbow.MultiTenancy.EntityFrameworkCore
+namespace Rainbow.MultiTenancy.Abstractions
 {
-    public class TenantConfiguration
+    public class TenantConfigurationString
     {
         public Guid TenantId { get; set; }
         public string Name { get; set; }

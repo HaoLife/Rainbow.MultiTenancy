@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
 {
-    public class TenantDbContext
-        : TenantDbContext<TenantUser, TenantRole, string>
+    public class TenantIdentityDbContext
+        : TenantIdentityDbContext<TenantUser, TenantRole, string>
     {
-        public TenantDbContext(DbContextOptions options) : base(options) { }
+        public TenantIdentityDbContext(DbContextOptions options) : base(options) { }
 
-        protected TenantDbContext() { }
+        protected TenantIdentityDbContext() { }
     }
 
-    public class TenantDbContext<TUser, TRole, TKey>
-        : TenantDbContext<TUser, TRole, TKey, TenantUserClaim<TKey>, TenantUserRole<TKey>, TenantUserLogin<TKey>, TenantRoleClaim<TKey>, TenantUserToken<TKey>>
+    public class TenantIdentityDbContext<TUser, TRole, TKey>
+        : TenantIdentityDbContext<TUser, TRole, TKey, TenantUserClaim<TKey>, TenantUserRole<TKey>, TenantUserLogin<TKey>, TenantRoleClaim<TKey>, TenantUserToken<TKey>>
         where TUser : TenantUser<TKey>
         where TRole : TenantRole<TKey>
         where TKey : IEquatable<TKey>
@@ -26,15 +26,15 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
         /// Initializes a new instance of the db context.
         /// </summary>
         /// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
-        public TenantDbContext(DbContextOptions options) : base(options) { }
+        public TenantIdentityDbContext(DbContextOptions options) : base(options) { }
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        protected TenantDbContext() { }
+        protected TenantIdentityDbContext() { }
     }
 
-    public abstract class TenantDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken> : TenantUserContext<TUser, TKey, TUserClaim, TUserLogin, TUserToken>
+    public abstract class TenantIdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken> : TenantUserContext<TUser, TKey, TUserClaim, TUserLogin, TUserToken>
         where TUser : TenantUser<TKey>
         where TRole : TenantRole<TKey>
         where TKey : IEquatable<TKey>
@@ -45,9 +45,9 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
         where TUserToken : TenantUserToken<TKey>
     {
 
-        public TenantDbContext(DbContextOptions options) : base(options) { }
+        public TenantIdentityDbContext(DbContextOptions options) : base(options) { }
 
-        protected TenantDbContext() { }
+        protected TenantIdentityDbContext() { }
 
         public virtual DbSet<TUserRole> UserRoles { get; set; }
 
@@ -59,7 +59,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            ModelBuilderExtensions.AddTenantRole<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>(builder, this);
+            TenantIdentityModelBuilderExtensions.AddTenantRole<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>(builder, this);
         }
     }
 }

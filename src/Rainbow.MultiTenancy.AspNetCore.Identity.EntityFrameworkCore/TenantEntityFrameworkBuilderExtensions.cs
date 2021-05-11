@@ -42,7 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 Type userStoreType = null;
                 Type roleStoreType = null;
-                var identityContext = FindGenericBaseType(contextType, typeof(TenantDbContext<,,,,,,,>));
+                var identityContext = FindGenericBaseType(contextType, typeof(TenantIdentityDbContext<,,,,,,,>));
                 if (identityContext == null)
                 {
                     // If its a custom DbContext, we can only add the default POCOs

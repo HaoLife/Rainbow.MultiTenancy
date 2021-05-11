@@ -46,7 +46,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
         /// </param>
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            ModelBuilderExtensions.AddTenantUser<TUser, TKey, TUserClaim, TUserLogin, TUserToken>(builder, this);
+            TenantIdentityModelBuilderExtensions.AddTenantUser<TUser, TKey, TUserClaim, TUserLogin, TUserToken>(builder, this);
 
         }
     }

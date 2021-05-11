@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
 {
-    public static class ModelBuilderExtensions
+    public static class TenantIdentityModelBuilderExtensions
     {
         public static ModelBuilder AddTenantUser<TUser, TKey, TUserClaim, TUserLogin, TUserToken>(this ModelBuilder builder
             , DbContext dbContext)
