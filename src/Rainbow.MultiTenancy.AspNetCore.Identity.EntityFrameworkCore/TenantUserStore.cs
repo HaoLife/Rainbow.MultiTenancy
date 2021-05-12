@@ -42,9 +42,9 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
 
         protected override async Task<TUserToken> FindTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
-            var a = await this.Context.Set<TUserToken>().FindAsync(new object[] { user.Id, loginProvider, user.TenantId });
-            //return base.FindTokenAsync(user, loginProvider, name, cancellationToken);
-            return a;
+            return await this.Context.Set<TUserToken>()
+                .FirstOrDefaultAsync(a => a.UserId.Equals(user.Id) && a.LoginProvider == loginProvider && a.TenantId == user.TenantId);
+
         }
         public override Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
         {

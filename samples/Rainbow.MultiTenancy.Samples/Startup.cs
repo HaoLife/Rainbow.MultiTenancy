@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,7 +39,8 @@ namespace Rainbow.MultiTenancy.Samples
                 options
                     //.AddDomainTenantResolveContributor("{tenant}.test.com")
                     .AddHttpTenantResolveContributor()
-                    .AddDefaultTenantConfiguration(Configuration.GetSection("Tenant"));
+                    //.AddDefaultTenantConfiguration(Configuration.GetSection("Tenant"))
+                    ;
             }).AddTenantEntityFrameworkStores<ApplicationDbContext>();
 
 
@@ -49,7 +51,9 @@ namespace Rainbow.MultiTenancy.Samples
             {
                 o.DefaultScheme = IdentityConstants.ApplicationScheme;
                 o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-            }).AddIdentityCookies();
+            })
+                .AddIdentityCookies()
+            ;
 
             services.AddTenantIdentityCore<TenantUser>(o =>
             {
@@ -92,9 +96,10 @@ namespace Rainbow.MultiTenancy.Samples
             app.UseRouting();
 
             app.UseAuthentication();
+            app.AddMultiTenancy();
+
             app.UseAuthorization();
 
-            app.AddMultiTenancy();
 
             app.UseEndpoints(endpoints =>
             {

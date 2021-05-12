@@ -8,4 +8,8 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Rainbow.MultiTenancy.Core\Rainbow.MultiTenancy.Core.csproj" />
+  </ItemGroup>
+
 </Project>

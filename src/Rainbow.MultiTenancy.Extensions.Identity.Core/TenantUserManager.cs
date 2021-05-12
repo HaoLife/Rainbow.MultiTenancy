@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Claims;
+using Rainbow.MultiTenancy.Core;
 
 namespace Rainbow.MultiTenancy.Extensions.Identity.Core
 {
@@ -135,7 +137,45 @@ namespace Rainbow.MultiTenancy.Extensions.Identity.Core
             return user;
         }
 
+        public virtual Task<TUser> FindByIdAsync(string userId, Guid? tenantId)
+        {
+            ThrowIfDisposed();
+            var query = this.Store as ITenantUserQueryStore<TUser>;
 
+            return query.FindByIdAsync(userId, tenantId, CancellationToken);
+        }
+
+
+        public virtual string GetTenantId(ClaimsPrincipal principal)
+        {
+            if (principal == null)
+            {
+                throw new ArgumentNullException("principal");
+            }
+
+            return principal.FindFirstValue(IdentityClaimTypes.TenantId);
+        }
+
+        public override Task<TUser> GetUserAsync(ClaimsPrincipal principal)
+        {
+            if (principal == null)
+            {
+                throw new ArgumentNullException("principal");
+            }
+
+            string userId = GetUserId(principal);
+            var tenantId = GetTenantId(principal);
+            if (userId != null && tenantId != null)
+            {
+                return FindByIdAsync(userId, Guid.Parse(tenantId));
+            }
+            if (userId != null)
+            {
+                return FindByIdAsync(userId);
+            }
+
+            return Task.FromResult<TUser>(null);
+        }
 
     }
 }

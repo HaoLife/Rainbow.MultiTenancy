@@ -32,6 +32,7 @@ namespace Rainbow.MultiTenancy.Extensions.Identity.Stores
         {
             UserName = userName;
         }
+        [PersonalData]
         public Guid? TenantId { get; set; }
     }
 }

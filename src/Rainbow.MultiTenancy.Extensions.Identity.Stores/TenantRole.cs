@@ -19,6 +19,8 @@ namespace Rainbow.MultiTenancy.Extensions.Identity.Stores
     public class TenantRole<TKey> : IdentityRole<TKey>, IMultiTenant
         where TKey : IEquatable<TKey>
     {
+
+        [PersonalData]
         public Guid? TenantId { get; set; }
     }
 }

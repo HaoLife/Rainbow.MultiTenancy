@@ -28,7 +28,7 @@ namespace Rainbow.MultiTenancy.Extensions.Identity.Core
             AddRoleValidator<TenantRoleValidator<TRole>>();
             Services.TryAddScoped<RoleManager<TRole>, TenantRoleManager<TRole>>();
             Services.TryAddScoped<TenantRoleManager<TRole>>();
-            Services.AddScoped(typeof(IUserClaimsPrincipalFactory<>).MakeGenericType(UserType), typeof(UserClaimsPrincipalFactory<,>).MakeGenericType(UserType, RoleType));
+            Services.AddScoped(typeof(IUserClaimsPrincipalFactory<>).MakeGenericType(UserType), typeof(TenantUserClaimsPrincipalFactory<,>).MakeGenericType(UserType, RoleType));
             return this;
         }
 

@@ -22,7 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<ILookupNormalizer, UpperInvariantLookupNormalizer>();
             services.TryAddScoped<IUserConfirmation<TUser>, DefaultUserConfirmation<TUser>>();
             services.TryAddScoped<IdentityErrorDescriber>();
-            services.TryAddScoped<IUserClaimsPrincipalFactory<TUser>, UserClaimsPrincipalFactory<TUser>>();
+            services.TryAddScoped<IUserClaimsPrincipalFactory<TUser>, TenantUserClaimsPrincipalFactory<TUser>>();
             services.TryAddScoped<UserManager<TUser>, TenantUserManager<TUser>>();
             services.TryAddScoped<TenantUserManager<TUser>>();
             if (setupAction != null)

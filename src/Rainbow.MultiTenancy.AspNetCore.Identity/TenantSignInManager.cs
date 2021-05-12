@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Rainbow.MultiTenancy.Extensions.Identity.Core;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Rainbow.MultiTenancy.AspNetCore.Identity
@@ -14,7 +15,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity
     {
         private readonly TenantUserManager<TUser> tenantUserManager;
 
-        public TenantSignInManager(TenantUserManager<TUser> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<TUser> claimsFactory, IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<TUser>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<TUser> confirmation) 
+        public TenantSignInManager(TenantUserManager<TUser> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<TUser> claimsFactory, IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<TUser>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<TUser> confirmation)
             : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
         {
             this.tenantUserManager = userManager;
@@ -46,5 +47,6 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity
 
             return await PasswordSignInAsync(user, password, tenantId, isPersistent, lockoutOnFailure);
         }
+
     }
 }
