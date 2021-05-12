@@ -35,6 +35,8 @@ namespace Rainbow.MultiTenancy.AspNetCore
             var hostName = this.RemovePre(httpContext.Request.Host.Value, ProtocolPrefixes);
             var extractResult = FormattedStringValueExtracter.Extract(hostName, _domainFormat, ignoreCase: true);
 
+            context.Handled = true;
+
             return Task.FromResult(extractResult.IsMatch ? extractResult.Matches[0].Value : null);
         }
 

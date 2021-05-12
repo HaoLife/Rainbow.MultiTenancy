@@ -36,7 +36,7 @@ namespace Rainbow.MultiTenancy.Samples
             services.AddMulitTenancy(options =>
             {
                 options
-                    .AddDomainTenantResolveContributor("{tenant}.test.com")
+                    //.AddDomainTenantResolveContributor("{tenant}.test.com")
                     .AddHttpTenantResolveContributor()
                     .AddDefaultTenantConfiguration(Configuration.GetSection("Tenant"));
             }).AddTenantEntityFrameworkStores<ApplicationDbContext>();
