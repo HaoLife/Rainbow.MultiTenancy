@@ -25,11 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainbow.MultiTenancy.AspNet
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity", "identity", "{9118ED7C-863C-4F6D-AFDA-FF90985E415B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainbow.MultiTenancy.AspNetCore.Identity", "src\Rainbow.MultiTenancy.AspNetCore.Identity\Rainbow.MultiTenancy.AspNetCore.Identity.csproj", "{F6B167F9-0957-48BB-B199-62B22E238808}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{51635DF8-7120-47C6-81B8-067F65B06FD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainbow.MultiTenancy.AspNetCore.Test", "test\Rainbow.MultiTenancy.AspNetCore.Test\Rainbow.MultiTenancy.AspNetCore.Test.csproj", "{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainbow.MultiTenancy.AspNetCore.Test", "test\Rainbow.MultiTenancy.AspNetCore.Test\Rainbow.MultiTenancy.AspNetCore.Test.csproj", "{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,10 +67,6 @@ Global
 		{88E507CC-F0A4-42A6-A703-05DB606745B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88E507CC-F0A4-42A6-A703-05DB606745B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88E507CC-F0A4-42A6-A703-05DB606745B1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6B167F9-0957-48BB-B199-62B22E238808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6B167F9-0957-48BB-B199-62B22E238808}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6B167F9-0957-48BB-B199-62B22E238808}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6B167F9-0957-48BB-B199-62B22E238808}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -91,7 +85,6 @@ Global
 		{609C9283-2793-4D1D-9A20-23A2BAAE5A42} = {9118ED7C-863C-4F6D-AFDA-FF90985E415B}
 		{88E507CC-F0A4-42A6-A703-05DB606745B1} = {9118ED7C-863C-4F6D-AFDA-FF90985E415B}
 		{9118ED7C-863C-4F6D-AFDA-FF90985E415B} = {8068B918-4873-4A7A-ACF8-F21A8E6E949C}
-		{F6B167F9-0957-48BB-B199-62B22E238808} = {9118ED7C-863C-4F6D-AFDA-FF90985E415B}
 		{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359} = {51635DF8-7120-47C6-81B8-067F65B06FD2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

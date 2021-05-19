@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Rainbow.MultiTenancy.Abstractions;
 using Rainbow.MultiTenancy.Extensions.Identity.Core;
 using Rainbow.MultiTenancy.Extensions.Identity.Stores;
 using System;
@@ -17,12 +18,10 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
         where TContext : DbContext
         where TKey : IEquatable<TKey>
     {
-        public TenantUserStore(TContext context, IdentityErrorDescriber describer = null) : base(context, describer) { }
+        public TenantUserStore(ICurrentTenant currentTenant, TContext context, IdentityErrorDescriber describer = null) : base(currentTenant, context, describer) { }
     }
     public class TenantUserStore<TUser, TRole, TContext, TKey, TUserClaim, TUserRole, TUserLogin, TUserToken, TRoleClaim>
         : UserStore<TUser, TRole, TContext, TKey, TUserClaim, TUserRole, TUserLogin, TUserToken, TRoleClaim>
-        , ITenantHandlerStore<TUser>
-        , ITenantUserQueryStore<TUser>
         where TUser : TenantUser<TKey>
         where TRole : TenantRole<TKey>
         where TContext : DbContext
@@ -34,90 +33,52 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
         where TRoleClaim : TenantRoleClaim<TKey>, new()
 
     {
-        public TenantUserStore(TContext context, IdentityErrorDescriber describer = null)
+        private readonly ICurrentTenant currentTenant;
+
+        public TenantUserStore(ICurrentTenant currentTenant, TContext context, IdentityErrorDescriber describer = null)
             : base(context, describer)
         {
-
+            this.currentTenant = currentTenant;
         }
 
         protected override async Task<TUserToken> FindTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             return await this.Context.Set<TUserToken>()
-                .FirstOrDefaultAsync(a => a.UserId.Equals(user.Id) && a.LoginProvider == loginProvider && a.TenantId == user.TenantId);
+                .FirstOrDefaultAsync(a => a.UserId.Equals(user.Id) && a.LoginProvider == loginProvider && a.TenantId == this.currentTenant.Id);
 
         }
         public override Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
         {
-            return this.FindByIdAsync(userId, null, cancellationToken);
-        }
-        public override Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default)
-        {
-            return this.FindByNameAsync(normalizedUserName, null, cancellationToken);
-        }
-        public override Task<TUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken = default)
-        {
-            return this.FindByLoginAsync(loginProvider, providerKey, null, cancellationToken);
-        }
-        public override Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default)
-        {
-            return this.FindByEmailAsync(normalizedEmail, null, cancellationToken);
-        }
-
-        public virtual Task<TUser> FindByIdAsync(string userId, Guid? tenantId, CancellationToken cancellationToken)
-        {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
             var id = ConvertIdFromString(userId);
-            return this.Users.FirstOrDefaultAsync(a => a.Id.Equals(id) && a.TenantId == tenantId, cancellationToken);
+            return this.Users.FirstOrDefaultAsync(a => a.Id.Equals(id) && a.TenantId == this.currentTenant.Id, cancellationToken);
         }
-
-        public virtual Task<TUser> FindByNameAsync(string normalizedUserName, Guid? tenantId, CancellationToken cancellationToken)
+        public override Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
-            return Users.FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName && u.TenantId == tenantId, cancellationToken);
-        }
-
-        public Task<TUser> FindByEmailAsync(string normalizedEmail, Guid? tenantId, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
-
-            return Users.FirstOrDefaultAsync(u => u.Email == normalizedEmail && u.TenantId == tenantId, cancellationToken);
+            return Users.FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName && u.TenantId == this.currentTenant.Id, cancellationToken);
 
         }
-
-        public async Task<TUser> FindByLoginAsync(string loginProvider, string providerKey, Guid? tenantId, CancellationToken cancellationToken = default)
+        public override async Task<TUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken = default)
         {
-            var login = await this.Context.Set<TUserLogin>().FirstOrDefaultAsync(a => a.LoginProvider == loginProvider && a.ProviderKey == providerKey && tenantId == tenantId);
+            var tenantId = this.currentTenant.Id;
+            var login = await this.Context.Set<TUserLogin>().FirstOrDefaultAsync(a => a.LoginProvider == loginProvider && a.ProviderKey == providerKey && a.TenantId == tenantId);
             if (login != null)
             {
                 return await this.Users.FirstOrDefaultAsync(a => a.Id.Equals(login.UserId) && a.TenantId == tenantId);
             }
             return null;
         }
-
-        public virtual Task<Guid?> GetTanantAsync(TUser user, CancellationToken cancellationToken)
+        public override Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            return Task.FromResult(user.TenantId);
-        }
+            ThrowIfDisposed();
 
-        public virtual Task SetTenantAsync(TUser user, Guid? tenantId, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            user.TenantId = tenantId;
-            return Task.CompletedTask;
-        }
+            return Users.FirstOrDefaultAsync(u => u.Email == normalizedEmail && u.TenantId == this.currentTenant.Id, cancellationToken);
 
+        }
     }
 }

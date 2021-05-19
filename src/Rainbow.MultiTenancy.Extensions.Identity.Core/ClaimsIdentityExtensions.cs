@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Rainbow.MultiTenancy.Core;
+using Rainbow.MultiTenant.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,10 @@ namespace Rainbow.MultiTenancy.Extensions.Identity.Core
         public static ClaimsIdentity AddTenantId<TUser>(this ClaimsIdentity identity, TUser user, UserManager<TUser> userManager)
             where TUser : class
         {
-            var tenantUserManager = userManager as TenantUserManager<TUser>;
-            if (tenantUserManager != null)
+            var multiTenantUser = user as IMultiTenant;
+            if (multiTenantUser != null)
             {
-                var tenantId = tenantUserManager.GetTanantIdAsync(user).GetAwaiter().GetResult();
+                var tenantId = multiTenantUser.TenantId;
                 if (tenantId.HasValue)
                     identity.AddClaim(new Claim(IdentityClaimTypes.TenantId, tenantId.ToString()));
             }
