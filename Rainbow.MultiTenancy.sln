@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{51635DF8-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainbow.MultiTenancy.AspNetCore.Test", "test\Rainbow.MultiTenancy.AspNetCore.Test\Rainbow.MultiTenancy.AspNetCore.Test.csproj", "{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainbow.MultiTenancy.IdentityServerSamples", "samples\Rainbow.MultiTenancy.IdentityServerSamples\Rainbow.MultiTenancy.IdentityServerSamples.csproj", "{E271BA61-7F25-4A67-A5F1-381AB97B987A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E271BA61-7F25-4A67-A5F1-381AB97B987A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E271BA61-7F25-4A67-A5F1-381AB97B987A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E271BA61-7F25-4A67-A5F1-381AB97B987A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E271BA61-7F25-4A67-A5F1-381AB97B987A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +92,7 @@ Global
 		{88E507CC-F0A4-42A6-A703-05DB606745B1} = {9118ED7C-863C-4F6D-AFDA-FF90985E415B}
 		{9118ED7C-863C-4F6D-AFDA-FF90985E415B} = {8068B918-4873-4A7A-ACF8-F21A8E6E949C}
 		{AA93C49D-7C6D-491B-BBCB-E0E89B8CB359} = {51635DF8-7120-47C6-81B8-067F65B06FD2}
+		{E271BA61-7F25-4A67-A5F1-381AB97B987A} = {FDB7EA45-C507-4F19-9E48-0A44029009F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1A2306A4-AE55-424D-B8E0-B2054FB8D07E}
