@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Rainbow.MultiTenancy.Abstractions;
+using Rainbow.MultiTenancy.Core;
 using Rainbow.MultiTenancy.Extensions.Identity.Stores;
 
 namespace Rainbow.MultiTenancy.AspNetCore.Identity.UI.Areas.Identity.Pages.Account
@@ -18,12 +20,17 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.UI.Areas.Identity.Pages.Accou
     {
         private readonly SignInManager<TenantUser> _signInManager;
         private readonly ILogger<TenantLoginModel> _logger;
+        private readonly IOptionsSnapshot<MultiTenancyCoreOptions> options;
 
-        public TenantLoginModel(SignInManager<TenantUser> signInManager, ILogger<TenantLoginModel> logger, ICurrentTenant currentTenant)
+        public TenantLoginModel(SignInManager<TenantUser> signInManager
+            , ILogger<TenantLoginModel> logger
+            , ICurrentTenant currentTenant,
+            IOptionsSnapshot<MultiTenancyCoreOptions> options)
         {
             _signInManager = signInManager;
             _logger = logger;
             CurrentTenant = currentTenant;
+            this.options = options;
         }
 
         [BindProperty]
@@ -94,6 +101,8 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.UI.Areas.Identity.Pages.Accou
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
+                        Response.Cookies.Append(options.Value.TenantKey, Input.TenantId.ToString());
+
                         return LocalRedirect(returnUrl);
                     }
                     if (result.RequiresTwoFactor)

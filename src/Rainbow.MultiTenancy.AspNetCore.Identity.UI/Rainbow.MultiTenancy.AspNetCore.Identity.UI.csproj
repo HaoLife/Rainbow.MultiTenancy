@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Rainbow.MultiTenancy.Abstractions\Rainbow.MultiTenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\Rainbow.MultiTenancy.Core\Rainbow.MultiTenancy.Core.csproj" />
     <ProjectReference Include="..\Rainbow.MultiTenancy.Extensions.Identity.Stores\Rainbow.MultiTenancy.Extensions.Identity.Stores.csproj" />
   </ItemGroup>
   

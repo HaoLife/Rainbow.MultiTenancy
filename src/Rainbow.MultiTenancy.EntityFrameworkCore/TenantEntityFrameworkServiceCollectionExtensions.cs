@@ -14,8 +14,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddTenantEntityFrameworkStores<TContext>(this IServiceCollection services)
             where TContext : DbContext
         {
-            services.AddScoped<ITenantRepository, EfCoreTenantRepository<TContext>>();
-            services.AddScoped<ITenantConfigurationRepository, EfCoreTenantRepository<TContext>>();
+            services.AddScoped<EfCoreTenantRepository<TContext>>();
+            services.AddScoped<ITenantRepository, TenantRespositoryDecorator<EfCoreTenantRepository<TContext>>>();
+            services.AddScoped<ITenantConfigurationRepository, TenantRespositoryDecorator<EfCoreTenantRepository<TContext>>>();
             services.AddScoped<ITenantStore, EfCoreTenantStore>();
             return services;
         }
