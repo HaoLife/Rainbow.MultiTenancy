@@ -45,6 +45,11 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
             this.currentTenant = currentTenant;
         }
 
+        public override Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken = default)
+        {
+            user.TenantId = this.currentTenant.Id;
+            return base.CreateAsync(user, cancellationToken);
+        }
         protected override async Task<TUserToken> FindTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             return await this.Context.Set<TUserToken>()

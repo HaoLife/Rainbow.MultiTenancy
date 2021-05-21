@@ -10,10 +10,10 @@ namespace Rainbow.MultiTenancy.EntityFrameworkCore
 {
     public class TenantDbContext : DbContext
     {
+
         public TenantDbContext([NotNull] DbContextOptions options)
             : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,5 +22,6 @@ namespace Rainbow.MultiTenancy.EntityFrameworkCore
 
             TenantModelBuilderExtensions.AddTenant(modelBuilder);
         }
+
     }
 }

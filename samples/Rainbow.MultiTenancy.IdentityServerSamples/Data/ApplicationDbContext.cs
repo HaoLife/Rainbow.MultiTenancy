@@ -1,8 +1,12 @@
-﻿using IdentityServer4.EntityFramework.Options;
+﻿using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.EntityFramework.Extensions;
+using IdentityServer4.EntityFramework.Interfaces;
+using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Rainbow.MultiTenancy.IdentityServerSamples.Models;
+using Rainbow.MultiTenancy.AspNetCore.ApiAuthorization.IdentityServer;
+using Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +14,19 @@ using System.Threading.Tasks;
 
 namespace Rainbow.MultiTenancy.IdentityServerSamples.Data
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class ApplicationDbContext : TenantApiAuthorizationDbContext
     {
-        public ApplicationDbContext(
-            DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IOptions<OperationalStoreOptions> operationalStoreOptions)
+            : base(options, operationalStoreOptions)
         {
         }
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            EntityFrameworkCore.TenantModelBuilderExtensions.AddTenant(builder);
+        }
     }
+
 }

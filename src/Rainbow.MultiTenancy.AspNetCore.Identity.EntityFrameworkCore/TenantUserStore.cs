@@ -5,7 +5,9 @@ using Rainbow.MultiTenancy.Abstractions;
 using Rainbow.MultiTenancy.Extensions.Identity.Core;
 using Rainbow.MultiTenancy.Extensions.Identity.Stores;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,10 +43,52 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
             this.currentTenant = currentTenant;
         }
 
+        #region 重写添加租户业务
+
+        public override Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken = default)
+        {
+            user.TenantId = this.currentTenant.Id;
+            return base.CreateAsync(user, cancellationToken);
+        }
+
+        #endregion
+
+        #region 添加租户id
+
+        protected override TUserClaim CreateUserClaim(TUser user, Claim claim)
+        {
+            var result = base.CreateUserClaim(user, claim);
+            result.TenantId = user.TenantId;
+            return result;
+        }
+        protected override TUserLogin CreateUserLogin(TUser user, UserLoginInfo login)
+        {
+            var result = base.CreateUserLogin(user, login);
+            result.TenantId = user.TenantId;
+            return result;
+        }
+        protected override TUserRole CreateUserRole(TUser user, TRole role)
+        {
+            var result = base.CreateUserRole(user, role);
+            result.TenantId = user.TenantId;
+            return result;
+        }
+        protected override TUserToken CreateUserToken(TUser user, string loginProvider, string name, string value)
+        {
+            var result = base.CreateUserToken(user, loginProvider, name, value);
+            result.TenantId = user.TenantId;
+            return result;
+        }
+
+        #endregion
+
+        #region 添加租户id的查询
+
+
         protected override async Task<TUserToken> FindTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             return await this.Context.Set<TUserToken>()
-                .FirstOrDefaultAsync(a => a.UserId.Equals(user.Id) && a.LoginProvider == loginProvider && a.TenantId == this.currentTenant.Id);
+                .FirstOrDefaultAsync(a => a.UserId.Equals(user.Id) && a.LoginProvider == loginProvider && a.TenantId == user.TenantId);
 
         }
         public override Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
@@ -80,5 +124,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.EntityFrameworkCore
             return Users.FirstOrDefaultAsync(u => u.Email == normalizedEmail && u.TenantId == this.currentTenant.Id, cancellationToken);
 
         }
+        #endregion
+
     }
 }

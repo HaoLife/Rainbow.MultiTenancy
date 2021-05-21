@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,7 +34,7 @@ namespace Rainbow.MultiTenancy.Samples
             services.AddMulitTenancy(options =>
             {
                 options
-                    //.AddDomainTenantResolveContributor("{tenant}.test.com")
+                    .AddDomainTenantResolveContributor("{tenant}.test.com")
                     .AddHttpTenantResolveContributor()
                     //.AddDefaultTenantConfiguration(Configuration.GetSection("Tenant"))
                     ;
@@ -45,26 +42,6 @@ namespace Rainbow.MultiTenancy.Samples
 
 
             services.AddDatabaseDeveloperPageExceptionFilter();
-
-
-            //services.AddAuthentication(o =>
-            //{
-            //    o.DefaultScheme = IdentityConstants.ApplicationScheme;
-            //    o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-            //})
-            //    .AddIdentityCookies()
-            //;
-
-            //services.AddTenantIdentityCore<TenantUser>(o =>
-            //{
-            //    o.Stores.MaxLengthForKeys = 128;
-            //    o.SignIn.RequireConfirmedAccount = true;
-            //})
-            //    .AddDefaultUI()
-            //    .AddTenantSignInManager()
-            //    .AddDefaultTokenProviders()
-            //    .AddRoles<TenantRole>()
-            //    .AddTenantEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddDefaultIdentity<TenantUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<TenantRole>()

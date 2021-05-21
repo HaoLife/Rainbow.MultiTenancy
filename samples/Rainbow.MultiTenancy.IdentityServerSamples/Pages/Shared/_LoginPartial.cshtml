@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using Rainbow.MultiTenancy.IdentityServerSamples.Models;
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@using Rainbow.MultiTenancy.Extensions.Identity.Stores;
+@inject SignInManager<TenantUser> SignInManager
+@inject UserManager<TenantUser> UserManager
 
 @{
     string returnUrl = null;

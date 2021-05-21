@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Rainbow.MultiTenancy.Extensions.Identity.Stores;
 using Rainbow.MultiTenancy.IdentityServerSamples.Data;
-using Rainbow.MultiTenancy.IdentityServerSamples.Models;
 
 namespace Rainbow.MultiTenancy.IdentityServerSamples
 {
@@ -26,17 +26,34 @@ namespace Rainbow.MultiTenancy.IdentityServerSamples
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                    .UseMultiTenancy()
+            );
+
+            services.AddMulitTenancy(options =>
+            {
+                options
+                    .AddDomainTenantResolveContributor("{tenant}.test.com")
+                    .AddHttpTenantResolveContributor()
+                    //.AddDefaultTenantConfiguration(Configuration.GetSection("Tenant"))
+                    ;
+            }).AddTenantEntityFrameworkStores<ApplicationDbContext>();
+
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddDefaultIdentity<TenantUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<TenantRole>()
+                .AddTenantIdentityCore()
+                .AddTenantDefaultUI()
+                .AddTenantEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<TenantUser, ApplicationDbContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
@@ -47,6 +64,7 @@ namespace Rainbow.MultiTenancy.IdentityServerSamples
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,6 +92,8 @@ namespace Rainbow.MultiTenancy.IdentityServerSamples
             app.UseRouting();
 
             app.UseAuthentication();
+            app.AddMultiTenancy();
+
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
