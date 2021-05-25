@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Rainbow.MultiTenant.Abstractions;
+using Rainbow.MultiTenancy.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

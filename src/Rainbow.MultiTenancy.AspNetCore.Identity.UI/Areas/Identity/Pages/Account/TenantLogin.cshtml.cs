@@ -101,7 +101,6 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.UI.Areas.Identity.Pages.Accou
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
-                        Response.Cookies.Append(options.Value.TenantKey, Input.TenantId.ToString());
 
                         return LocalRedirect(returnUrl);
                     }

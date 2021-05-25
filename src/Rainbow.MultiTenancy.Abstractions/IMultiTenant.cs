@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rainbow.MultiTenant.Abstractions
+namespace Rainbow.MultiTenancy.Abstractions
 {
     public interface IMultiTenant
     {
