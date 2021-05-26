@@ -37,7 +37,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identityServer", "identityS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainbow.MultiTenancy.AspNetCore.ApiAuthorization.IdentityServer", "src\Rainbow.MultiTenancy.AspNetCore.ApiAuthorization.IdentityServer\Rainbow.MultiTenancy.AspNetCore.ApiAuthorization.IdentityServer.csproj", "{AADF8AB4-E0A0-4F9E-90F5-9004E9322D7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainbow.MultiTenancy.IdentityServer4", "src\Rainbow.MultiTenancy.IdentityServer4\Rainbow.MultiTenancy.IdentityServer4.csproj", "{7D93A470-C92C-4D10-888E-5DEF567D4D3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainbow.MultiTenancy.IdentityServer4", "src\Rainbow.MultiTenancy.IdentityServer4\Rainbow.MultiTenancy.IdentityServer4.csproj", "{7D93A470-C92C-4D10-888E-5DEF567D4D3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainbow.MultiTenancy.IdentityServerRemoteSPA", "samples\Rainbow.MultiTenancy.IdentityServerRemoteSPA\Rainbow.MultiTenancy.IdentityServerRemoteSPA.csproj", "{D7F4CBD1-FE9C-45CF-973C-6D0B0AF059E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,10 @@ Global
 		{7D93A470-C92C-4D10-888E-5DEF567D4D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D93A470-C92C-4D10-888E-5DEF567D4D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D93A470-C92C-4D10-888E-5DEF567D4D3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F4CBD1-FE9C-45CF-973C-6D0B0AF059E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F4CBD1-FE9C-45CF-973C-6D0B0AF059E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F4CBD1-FE9C-45CF-973C-6D0B0AF059E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F4CBD1-FE9C-45CF-973C-6D0B0AF059E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,6 +123,7 @@ Global
 		{1F96C7E9-6743-4D3D-B029-5E8EB717132B} = {8068B918-4873-4A7A-ACF8-F21A8E6E949C}
 		{AADF8AB4-E0A0-4F9E-90F5-9004E9322D7F} = {1F96C7E9-6743-4D3D-B029-5E8EB717132B}
 		{7D93A470-C92C-4D10-888E-5DEF567D4D3F} = {1F96C7E9-6743-4D3D-B029-5E8EB717132B}
+		{D7F4CBD1-FE9C-45CF-973C-6D0B0AF059E3} = {FDB7EA45-C507-4F19-9E48-0A44029009F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1A2306A4-AE55-424D-B8E0-B2054FB8D07E}
