@@ -49,7 +49,6 @@ namespace Rainbow.MultiTenancy.IdentityServerSamples
             services.AddDefaultIdentity<TenantUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<TenantRole>()
                 .AddTenantIdentityCore()
-                .AddTenantDefaultUI()
                 .AddTenantEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()

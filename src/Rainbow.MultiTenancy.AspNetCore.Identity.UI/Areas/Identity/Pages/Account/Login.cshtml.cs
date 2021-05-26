@@ -16,14 +16,14 @@ using Rainbow.MultiTenancy.Extensions.Identity.Stores;
 namespace Rainbow.MultiTenancy.AspNetCore.Identity.UI.Areas.Identity.Pages.Account
 {
 
-    public class TenantLoginModel : PageModel
+    public class LoginModel : PageModel
     {
         private readonly SignInManager<TenantUser> _signInManager;
-        private readonly ILogger<TenantLoginModel> _logger;
+        private readonly ILogger<LoginModel> _logger;
         private readonly IOptionsSnapshot<MultiTenancyCoreOptions> options;
 
-        public TenantLoginModel(SignInManager<TenantUser> signInManager
-            , ILogger<TenantLoginModel> logger
+        public LoginModel(SignInManager<TenantUser> signInManager
+            , ILogger<LoginModel> logger
             , ICurrentTenant currentTenant,
             IOptionsSnapshot<MultiTenancyCoreOptions> options)
         {
