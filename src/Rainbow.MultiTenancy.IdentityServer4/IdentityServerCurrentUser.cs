@@ -1,6 +1,7 @@
 ﻿using IdentityModel;
 using Rainbow.MultiTenancy.Abstractions;
 using Rainbow.MultiTenancy.Core;
+using Rainbow.MultiTenancy.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Rainbow.MultiTenancy.IdentityServer4
 
         public virtual bool IsAuthenticated => Id.HasValue;
 
-        public virtual Guid? Id => _principalAccessor.Principal?.FindUserId();
+        public virtual Guid? Id => _principalAccessor.Principal?.FindIdsUserId();
 
         public virtual string UserName => this.FindClaimValue(JwtClaimTypes.GivenName);
 

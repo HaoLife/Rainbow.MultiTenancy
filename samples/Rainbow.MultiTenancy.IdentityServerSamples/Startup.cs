@@ -52,8 +52,9 @@ namespace Rainbow.MultiTenancy.IdentityServerSamples
                 .AddTenantEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddTenantIdentityServer()
-                .AddApiAuthorization<TenantUser, ApplicationDbContext>();
+                .AddTenantIdentityServerCore()
+                .AddApiAuthorization<TenantUser, ApplicationDbContext>()
+                .AddTenantAspNetIdentityServer<TenantUser>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

@@ -36,6 +36,7 @@
     <ProjectReference Include="..\..\src\Rainbow.MultiTenancy.AspNetCore.Identity.UI\Rainbow.MultiTenancy.AspNetCore.Identity.UI.csproj" />
     <ProjectReference Include="..\..\src\Rainbow.MultiTenancy.AspNetCore\Rainbow.MultiTenancy.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\Rainbow.MultiTenancy.EntityFrameworkCore\Rainbow.MultiTenancy.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Rainbow.MultiTenancy.IdentityServer4.AspNetIdentity\Rainbow.MultiTenancy.IdentityServer4.AspNetIdentity.csproj" />
     <ProjectReference Include="..\..\src\Rainbow.MultiTenancy.IdentityServer4\Rainbow.MultiTenancy.IdentityServer4.csproj" />
   </ItemGroup>
 

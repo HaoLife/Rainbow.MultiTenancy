@@ -14,11 +14,11 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class TenantIdentityServerBuilderConfigurationExtensions
     {
-        public static IIdentityServerBuilder AddTenantIdentityServer(this IIdentityServerBuilder builder)
+        public static IIdentityServerBuilder AddTenantIdentityServerCore(this IIdentityServerBuilder builder)
         {
             builder.Services
-                .AddTransient<IEndpointRouter, TenantEndpointRouter>()
-                .AddTransient<ICurrentUser, IdentityServerCurrentUser>();
+                .AddTransient<ICurrentUser, IdentityServerCurrentUser>()
+                .AddTransient<IClaimsService, TenantClaimsService>();
             return builder;
         }
 

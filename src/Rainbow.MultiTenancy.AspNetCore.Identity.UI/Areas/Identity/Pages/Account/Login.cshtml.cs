@@ -21,16 +21,19 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.UI.Areas.Identity.Pages.Accou
         private readonly SignInManager<TenantUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IOptionsSnapshot<MultiTenancyCoreOptions> options;
+        private readonly ITenantStore tenantStore;
 
         public LoginModel(SignInManager<TenantUser> signInManager
             , ILogger<LoginModel> logger
-            , ICurrentTenant currentTenant,
-            IOptionsSnapshot<MultiTenancyCoreOptions> options)
+            , ICurrentTenant currentTenant
+            , IOptionsSnapshot<MultiTenancyCoreOptions> options
+            , ITenantStore tenantStore)
         {
             _signInManager = signInManager;
             _logger = logger;
             CurrentTenant = currentTenant;
             this.options = options;
+            this.tenantStore = tenantStore;
         }
 
         [BindProperty]
@@ -45,7 +48,7 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.UI.Areas.Identity.Pages.Accou
         public class InputModel
         {
             [Required]
-            public Guid? TenantId { get; set; }
+            public string TenantIdOrName { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -93,7 +96,13 @@ namespace Rainbow.MultiTenancy.AspNetCore.Identity.UI.Areas.Identity.Pages.Accou
 
             if (ModelState.IsValid)
             {
-                using (this.CurrentTenant.Change(Input.TenantId))
+                if (!Guid.TryParse(Input.TenantIdOrName, out var parsedTenantId))
+                {
+                    var tenant = await this.tenantStore.FindAsync(Input.TenantIdOrName);
+                    parsedTenantId = tenant.Id;
+                }
+
+                using (this.CurrentTenant.Change(parsedTenantId))
                 {
                     // This doesn't count login failures towards account lockout
                     // To enable password failures to trigger account lockout, set lockoutOnFailure: true

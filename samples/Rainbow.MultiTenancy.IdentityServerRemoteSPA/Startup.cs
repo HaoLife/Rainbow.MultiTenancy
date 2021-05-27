@@ -51,17 +51,22 @@ namespace Rainbow.MultiTenancy.IdentityServerRemoteSPA
                 .AddTenantEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddTenantIdentityServer()
-                .AddApiAuthorization<TenantUser, ApplicationDbContext>();
+                .AddTenantIdentityServerCore()
+                .AddApiAuthorization<TenantUser, ApplicationDbContext>()
+                .AddTenantAspNetIdentityServer<TenantUser>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
             services.AddControllersWithViews();
             services.AddRazorPages();
-            // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
+
+            services.AddCors(options =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                options.AddDefaultPolicy(builder =>
+                    builder.WithOrigins("http://localhost:4200", "https://localhost:5001")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                    );
             });
         }
 
@@ -88,6 +93,7 @@ namespace Rainbow.MultiTenancy.IdentityServerRemoteSPA
             }
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthentication();
             app.AddMultiTenancy();
@@ -102,18 +108,6 @@ namespace Rainbow.MultiTenancy.IdentityServerRemoteSPA
                 endpoints.MapRazorPages();
             });
 
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
         }
     }
 }

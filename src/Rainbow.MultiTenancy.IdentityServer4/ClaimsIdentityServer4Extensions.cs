@@ -11,7 +11,7 @@ namespace Rainbow.MultiTenancy.IdentityServer4
 {
     public static class ClaimsIdentityServer4Extensions
     {
-        public static Guid? FindUserId(this ClaimsPrincipal principal)
+        public static Guid? FindIdsUserId(this ClaimsPrincipal principal)
         {
             var userIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == JwtClaimTypes.Subject);
             if (userIdOrNull == null || userIdOrNull.Value.IsNullOrWhiteSpace())
@@ -25,16 +25,5 @@ namespace Rainbow.MultiTenancy.IdentityServer4
             return null;
         }
 
-
-        public static Guid? FindTenantId(this ClaimsPrincipal principal)
-        {
-            var tenantIdOrNull = principal?.Claims?.FirstOrDefault(c => c.Type == IdentityClaimTypes.TenantId);
-            if (tenantIdOrNull == null || tenantIdOrNull.Value.IsNullOrWhiteSpace())
-            {
-                return null;
-            }
-
-            return Guid.Parse(tenantIdOrNull.Value);
-        }
     }
 }
