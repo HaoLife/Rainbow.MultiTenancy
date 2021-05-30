@@ -96,7 +96,7 @@ namespace Rainbow.MultiTenancy.IdentityServerRemoteSPA
             app.UseCors();
 
             app.UseAuthentication();
-            app.AddMultiTenancy();
+            app.UseMultiTenancy();
 
             app.UseIdentityServer();
             app.UseAuthorization();

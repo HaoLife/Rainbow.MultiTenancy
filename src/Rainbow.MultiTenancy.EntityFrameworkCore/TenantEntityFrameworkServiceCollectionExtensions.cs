@@ -15,9 +15,18 @@ namespace Microsoft.Extensions.DependencyInjection
             where TContext : DbContext
         {
             services.AddScoped<EfCoreTenantRepository<TContext>>();
-            services.AddScoped<ITenantRepository, TenantRespositoryDecorator<EfCoreTenantRepository<TContext>>>();
-            services.AddScoped<ITenantConfigurationRepository, TenantRespositoryDecorator<EfCoreTenantRepository<TContext>>>();
-            services.AddScoped<ITenantStore, EfCoreTenantStore>();
+            services.AddTransient<ITenantRepository, TenantRespositoryDecorator<EfCoreTenantRepository<TContext>>>();
+            services.AddTransient<ITenantConfigurationRepository, TenantRespositoryDecorator<EfCoreTenantRepository<TContext>>>();
+            services.AddTransient<ITenantStore, EfCoreTenantStore>();
+            return services;
+        }
+
+
+        public static IServiceCollection AddTenantEntityFrameworkConfiguration<TContext>(this IServiceCollection services)
+            where TContext : DbContext
+        {
+            services.AddScoped<EfCoreTenantRepository<TContext>>();
+            services.AddTransient<ITenantConfigurationRepository, TenantRespositoryDecorator<EfCoreTenantRepository<TContext>>>();
             return services;
         }
     }

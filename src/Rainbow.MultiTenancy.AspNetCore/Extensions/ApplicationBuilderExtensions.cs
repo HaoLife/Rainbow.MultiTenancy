@@ -8,9 +8,14 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder AddMultiTenancy(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseMultiTenancy(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<MultiTenancyMiddleware>();
+        }
+
+        public static IApplicationBuilder AddMultiTenancyService(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<MultiTenancyServiceMiddleware>();
         }
     }
 }

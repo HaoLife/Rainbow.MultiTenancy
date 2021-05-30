@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Rainbow.MultiTenancy.Abstractions;
 using Rainbow.MultiTenancy.AspNetCore;
+using Rainbow.MultiTenancy.AspNetCore.Hosting;
 using Rainbow.MultiTenancy.Core;
 using System;
 using System.Collections.Generic;
@@ -21,8 +23,53 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<MultiTenancyMiddleware>()
             );
 
-            return services.AddMulitTenancyCore(action)
-                .AddHttpContextAccessor();
+            return services.AddHttpContextAccessor()
+                .AddMulitTenancyCore(action);
+        }
+
+        public static IServiceCollection AddTenantService(this IServiceCollection services)
+        {
+            services.AddLogging();
+            services.TryAddTransient<MultiTenancyServiceMiddleware>();
+            services.TryAddSingleton<IEndpointRouter, EndpointRouter>();
+
+            services.AddEndpoint<TenantListEndpoint>(TenantRoutePaths.List.EnsureLeadingSlash());
+            services.AddEndpoint<TenantIdEndpoint>(TenantRoutePaths.Id.EnsureLeadingSlash());
+            services.AddEndpoint<TenantNameEndpoint>(TenantRoutePaths.Name.EnsureLeadingSlash());
+
+            return services;
+        }
+
+        public static IServiceCollection AddEndpoint<T>(this IServiceCollection services, PathString path)
+            where T : class, IEndpointHandler
+        {
+            services.AddTransient<T>();
+            services.AddSingleton(new Rainbow.MultiTenancy.AspNetCore.Hosting.Endpoint(path, typeof(T)));
+
+            return services;
+        }
+
+
+
+        public static IServiceCollection AddTenantDefaultRemoteStores(this IServiceCollection services, Action<RemoteTenantOptions> action)
+        {
+            services.AddHttpClient();
+            services.AddTransient<ITenantStore, MingleTenantStore>();
+            services.AddTransient<ITenantService, RemoteTenantService>();
+            services.AddTransient<ITenantConfigurationRepository, DefaultTenantRepository>();
+
+            services.Configure<RemoteTenantOptions>(action);
+            return services;
+        }
+
+        public static IServiceCollection AddTenantRemoteStores(this IServiceCollection services, Action<RemoteTenantOptions> action)
+        {
+            services.AddHttpClient();
+            services.AddTransient<ITenantStore, MingleTenantStore>();
+            services.AddTransient<ITenantService, RemoteTenantService>();
+            services.Configure<RemoteTenantOptions>(action);
+
+            return services;
         }
     }
 }

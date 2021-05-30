@@ -40,7 +40,8 @@ namespace Rainbow.MultiTenancy.IdentityServerSamples
                     .AddHttpTenantResolveContributor()
                     //.AddDefaultTenantConfiguration(Configuration.GetSection("Tenant"))
                     ;
-            }).AddTenantEntityFrameworkStores<ApplicationDbContext>();
+            }).AddTenantEntityFrameworkStores<ApplicationDbContext>()
+                .AddTenantService();
 
 
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -99,7 +100,8 @@ namespace Rainbow.MultiTenancy.IdentityServerSamples
             app.UseRouting();
 
             app.UseAuthentication();
-            app.AddMultiTenancy();
+            app.UseMultiTenancy();
+            app.AddMultiTenancyService();
 
             app.UseIdentityServer();
             app.UseAuthorization();

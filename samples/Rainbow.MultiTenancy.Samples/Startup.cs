@@ -74,7 +74,7 @@ namespace Rainbow.MultiTenancy.Samples
             app.UseRouting();
 
             app.UseAuthentication();
-            app.AddMultiTenancy();
+            app.UseMultiTenancy();
 
             app.UseAuthorization();
 

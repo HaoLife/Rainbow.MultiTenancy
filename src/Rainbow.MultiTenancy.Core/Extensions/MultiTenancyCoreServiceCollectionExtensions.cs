@@ -20,6 +20,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddSingleton<ICurrentTenantAccessor, AsyncLocalCurrentTenantAccessor>()
                 .AddTransient<ICurrentUser, CurrentUser>()
                 .AddTransient<ITenantStore, DefaultTenantStore>()
+                .AddTransient<ITenantRepository, DefaultTenantRepository>()
+                .AddTransient<ITenantConfigurationRepository, DefaultTenantRepository>()
                 .AddTransient<ITenantResolver, TenantResolver>()
                 .AddTransient<ITenantConfigurationProvider, TenantConfigurationProvider>()
                 .AddTransient<ICurrentTenant, CurrentTenant>()
@@ -28,5 +30,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return services;
         }
+
     }
 }

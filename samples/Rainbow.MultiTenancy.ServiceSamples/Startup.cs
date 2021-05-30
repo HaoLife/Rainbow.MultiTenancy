@@ -41,14 +41,18 @@ namespace Rainbow.MultiTenancy.ServiceSamples
                     options.Audience = "test";
                     options.RequireHttpsMetadata = false;
 
-                })
-                //.AddIdentityServerAuthentication(options =>
-                //{
-                //    options.Authority = "https://localhost:5001";
-                //    options.RequireHttpsMetadata = false;
-                //    options.ApiName = "test";
-                //})
-                ;
+                });
+
+
+            services.AddMulitTenancy(options =>
+            {
+                options
+                    .AddDomainTenantResolveContributor("{tenant}.test.com")
+                    .AddHttpTenantResolveContributor()
+                    .AddDefaultTenantConfiguration(Configuration.GetSection("Tenant"))
+                    ;
+            }).AddTenantDefaultRemoteStores(options => options.Path = "https://localhost:5001");
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +70,7 @@ namespace Rainbow.MultiTenancy.ServiceSamples
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseMultiTenancy();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
